@@ -96,16 +96,21 @@ function gramsToOunces(grams) {
   return round1(grams / 28.3495);
 }
 
-function smartSavoryProtein(name) {
-  return name.replace(" Breast", "").replace(" 90/10", "");
+function optionLabel(name) {
+  return name.replace(" Cooked", "").replace(" Dry", "").replace(" Nonfat", "").replace(" Low-Fat", "");
 }
 
 const savoryProteins = [
-  { name: "Chicken Breast", macrosPer100: { calories: 165, protein: 31, carbs: 0, fat: 3.6 }, grams: { low_cal: 130, lean: 150, anabolic: 200, bulk: 180 }, cookTime: 17 },
+  { name: "Chicken Breast Cooked", macrosPer100: { calories: 165, protein: 31, carbs: 0, fat: 3.6 }, grams: { low_cal: 130, lean: 150, anabolic: 200, bulk: 180 }, cookTime: 17 },
   { name: "Lean Ground Beef 90/10", macrosPer100: { calories: 176, protein: 26, carbs: 0, fat: 10 }, grams: { low_cal: 120, lean: 150, anabolic: 140, bulk: 180 }, cookTime: 13 },
-  { name: "Salmon", macrosPer100: { calories: 208, protein: 20, carbs: 0, fat: 13 }, grams: { low_cal: 120, lean: 150, anabolic: 150, bulk: 180 }, cookTime: 14 },
   { name: "Turkey Breast Deli", macrosPer100: { calories: 104, protein: 17, carbs: 3, fat: 2 }, grams: { low_cal: 100, lean: 120, anabolic: 150, bulk: 140 }, cookTime: 4 },
-  { name: "Egg Whites", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { low_cal: 200, lean: 220, anabolic: 280, bulk: 220 }, cookTime: 8 },
+  { name: "Salmon", macrosPer100: { calories: 208, protein: 20, carbs: 0, fat: 13 }, grams: { low_cal: 120, lean: 150, anabolic: 150, bulk: 180 }, cookTime: 14 },
+  { name: "Tuna Can In Water", macrosPer100: { calories: 116, protein: 26, carbs: 0, fat: 1 }, grams: { low_cal: 120, lean: 140, anabolic: 180, bulk: 160 }, cookTime: 3 },
+  { name: "Egg White", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { low_cal: 200, lean: 220, anabolic: 280, bulk: 220 }, cookTime: 8 },
+  { name: "Whole Egg", macrosPer100: { calories: 143, protein: 13, carbs: 1, fat: 10 }, grams: { low_cal: 100, lean: 100, anabolic: 120, bulk: 150 }, cookTime: 8 },
+  { name: "Greek Yogurt Nonfat", macrosPer100: { calories: 59, protein: 10, carbs: 3.6, fat: 0.4 }, grams: { low_cal: 170, lean: 200, anabolic: 250, bulk: 220 }, cookTime: 2 },
+  { name: "Cottage Cheese Low-Fat", macrosPer100: { calories: 81, protein: 10.5, carbs: 4, fat: 2.3 }, grams: { low_cal: 150, lean: 180, anabolic: 220, bulk: 200 }, cookTime: 2 },
+  { name: "Whey Isolate", macrosPer100: { calories: 372, protein: 86, carbs: 4, fat: 2 }, grams: { low_cal: 25, lean: 30, anabolic: 40, bulk: 35 }, cookTime: 1 },
 ];
 
 const savoryCarbs = [
@@ -114,13 +119,21 @@ const savoryCarbs = [
   { name: "Sweet Potato", macrosPer100: { calories: 86, protein: 1.6, carbs: 20, fat: 0.1 }, grams: { low_cal: 120, lean: 180, anabolic: 150, bulk: 250 }, cookTime: 35 },
   { name: "Bread", macrosPer100: { calories: 265, protein: 9, carbs: 49, fat: 3.2 }, grams: { low_cal: 50, lean: 60, anabolic: 60, bulk: 100 }, cookTime: 4 },
   { name: "Bagel", macrosPer100: { calories: 250, protein: 10, carbs: 49, fat: 1.5 }, grams: { low_cal: 55, lean: 75, anabolic: 75, bulk: 110 }, cookTime: 8 },
+  { name: "Cream of Rice Dry", macrosPer100: { calories: 370, protein: 6.7, carbs: 83, fat: 0.6 }, grams: { low_cal: 25, lean: 40, anabolic: 45, bulk: 70 }, cookTime: 6 },
+  { name: "Oats Dry", macrosPer100: { calories: 389, protein: 16.9, carbs: 66.3, fat: 6.9 }, grams: { low_cal: 25, lean: 40, anabolic: 40, bulk: 70 }, cookTime: 6 },
+  { name: "Banana", macrosPer100: { calories: 89, protein: 1.1, carbs: 23, fat: 0.3 }, grams: { low_cal: 60, lean: 100, anabolic: 100, bulk: 140 }, cookTime: 1 },
+  { name: "Blueberries", macrosPer100: { calories: 57, protein: 0.7, carbs: 14.5, fat: 0.3 }, grams: { low_cal: 60, lean: 80, anabolic: 80, bulk: 120 }, cookTime: 1 },
+  { name: "Apple", macrosPer100: { calories: 52, protein: 0.3, carbs: 14, fat: 0.2 }, grams: { low_cal: 80, lean: 120, anabolic: 120, bulk: 180 }, cookTime: 2 },
+  { name: "White Rice Cake", macrosPer100: { calories: 387, protein: 8, carbs: 81, fat: 3 }, grams: { low_cal: 18, lean: 27, anabolic: 27, bulk: 45 }, cookTime: 1 },
 ];
 
 const savoryFats = [
   { name: "None", macrosPer100: { calories: 0, protein: 0, carbs: 0, fat: 0 }, grams: { low_cal: 0, lean: 0, anabolic: 0, bulk: 0 } },
-  { name: "Olive Oil", macrosPer100: { calories: 884, protein: 0, carbs: 0, fat: 100 }, grams: { low_cal: 0, lean: 5, anabolic: 5, bulk: 15 } },
-  { name: "Avocado", macrosPer100: { calories: 160, protein: 2, carbs: 9, fat: 15 }, grams: { low_cal: 25, lean: 40, anabolic: 35, bulk: 70 } },
   { name: "Peanut Butter", macrosPer100: { calories: 588, protein: 25, carbs: 20, fat: 50 }, grams: { low_cal: 8, lean: 12, anabolic: 10, bulk: 24 } },
+  { name: "Almonds", macrosPer100: { calories: 579, protein: 21, carbs: 22, fat: 50 }, grams: { low_cal: 10, lean: 15, anabolic: 15, bulk: 28 } },
+  { name: "Avocado", macrosPer100: { calories: 160, protein: 2, carbs: 9, fat: 15 }, grams: { low_cal: 25, lean: 40, anabolic: 35, bulk: 70 } },
+  { name: "Olive Oil", macrosPer100: { calories: 884, protein: 0, carbs: 0, fat: 100 }, grams: { low_cal: 0, lean: 5, anabolic: 5, bulk: 15 } },
+  { name: "Whole Egg", macrosPer100: { calories: 143, protein: 13, carbs: 1, fat: 10 }, grams: { low_cal: 50, lean: 50, anabolic: 50, bulk: 100 } },
 ];
 
 const savoryVeg = [
@@ -128,13 +141,25 @@ const savoryVeg = [
   { name: "Green Beans", macrosPer100: { calories: 31, protein: 1.8, carbs: 7, fat: 0.1 }, grams: { low_cal: 180, lean: 120, anabolic: 150, bulk: 100 }, cookTime: 8 },
   { name: "Asparagus", macrosPer100: { calories: 20, protein: 2.2, carbs: 3.9, fat: 0.1 }, grams: { low_cal: 180, lean: 120, anabolic: 150, bulk: 100 }, cookTime: 7 },
   { name: "Spinach", macrosPer100: { calories: 23, protein: 2.9, carbs: 3.6, fat: 0.4 }, grams: { low_cal: 120, lean: 80, anabolic: 100, bulk: 60 }, cookTime: 4 },
+  { name: "Mixed Salad Greens", macrosPer100: { calories: 17, protein: 1.8, carbs: 3.2, fat: 0.2 }, grams: { low_cal: 120, lean: 80, anabolic: 100, bulk: 60 }, cookTime: 2 },
+  { name: "Bell Peppers", macrosPer100: { calories: 31, protein: 1, carbs: 6, fat: 0.3 }, grams: { low_cal: 150, lean: 100, anabolic: 120, bulk: 80 }, cookTime: 5 },
+  { name: "Zucchini", macrosPer100: { calories: 17, protein: 1.2, carbs: 3.1, fat: 0.3 }, grams: { low_cal: 180, lean: 120, anabolic: 140, bulk: 100 }, cookTime: 5 },
+  { name: "Cauliflower", macrosPer100: { calories: 25, protein: 1.9, carbs: 5, fat: 0.3 }, grams: { low_cal: 180, lean: 120, anabolic: 150, bulk: 100 }, cookTime: 8 },
+];
+
+const savoryFlavors = [
+  "Garlic Herb",
+  "Spicy",
+  "Lemon Fresh",
+  "Creamy Protein",
+  "Sweet Savory",
 ];
 
 const dessertBases = [
   { name: "Greek Yogurt Nonfat", macrosPer100: { calories: 59, protein: 10, carbs: 3.6, fat: 0.4 }, grams: { low_cal: 170, lean: 200, anabolic: 250, bulk: 220 } },
   { name: "Cottage Cheese Low-Fat", macrosPer100: { calories: 81, protein: 10.5, carbs: 4, fat: 2.3 }, grams: { low_cal: 150, lean: 180, anabolic: 220, bulk: 200 } },
   { name: "Whey Isolate", macrosPer100: { calories: 372, protein: 86, carbs: 4, fat: 2 }, grams: { low_cal: 25, lean: 30, anabolic: 40, bulk: 35 } },
-  { name: "Egg Whites", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { low_cal: 150, lean: 180, anabolic: 240, bulk: 200 } },
+  { name: "Egg White", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { low_cal: 150, lean: 180, anabolic: 240, bulk: 200 } },
 ];
 
 const dessertCarbs = [
@@ -142,6 +167,7 @@ const dessertCarbs = [
   { name: "Cream of Rice Dry", macrosPer100: { calories: 370, protein: 6.7, carbs: 83, fat: 0.6 }, grams: { low_cal: 25, lean: 40, anabolic: 45, bulk: 70 } },
   { name: "Banana", macrosPer100: { calories: 89, protein: 1.1, carbs: 23, fat: 0.3 }, grams: { low_cal: 60, lean: 100, anabolic: 100, bulk: 140 } },
   { name: "Blueberries", macrosPer100: { calories: 57, protein: 0.7, carbs: 14.5, fat: 0.3 }, grams: { low_cal: 60, lean: 80, anabolic: 80, bulk: 120 } },
+  { name: "Apple", macrosPer100: { calories: 52, protein: 0.3, carbs: 14, fat: 0.2 }, grams: { low_cal: 80, lean: 120, anabolic: 120, bulk: 180 } },
 ];
 
 const dessertAddons = [
@@ -156,6 +182,37 @@ const dessertStyles = [
   { name: "Pudding", flow: ["Whisk", "Thicken", "Chill", "Serve"], totalTime: 7 },
   { name: "Mug Cake", flow: ["Mix", "Cook", "Rest", "Serve"], totalTime: 10 },
   { name: "Cookie Dough", flow: ["Mix", "Fold", "Chill", "Serve"], totalTime: 6 },
+];
+
+const dessertFlavors = [
+  "Vanilla",
+  "Banana",
+  "Banana Nut",
+  "Brownie Batter",
+  "Strawberry Banana",
+  "Cherry",
+  "Lemon",
+  "Apple Cinnamon",
+  "Chocolate Chip",
+  "Apple",
+  "Pumpkin",
+  "Carrot Cake",
+  "Red Velvet",
+  "Coconut",
+  "Almond",
+  "Peach",
+  "Smores",
+  "Mint",
+  "Mint Chocolate",
+  "Chocolate Strawberry",
+  "Chocolate Banana",
+  "Pecan",
+  "Caramel",
+  "Salted Caramel",
+  "Chocolate",
+  "Strawberry",
+  "Birthday Cake",
+  "Biscoff",
 ];
 
 function SelectField({ label, value, onChange, options }) {
@@ -226,15 +283,6 @@ function tabButtonStyle(isActive) {
     fontWeight: 700,
     cursor: "pointer",
   };
-}
-
-function CustomPortionBlock({ title, fields }) {
-  return (
-    <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-      <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>{title}</div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>{fields}</div>
-    </div>
-  );
 }
 
 function BuilderShell({ title, description, controls, customBlock, recipe, tab, setTab, snapshotTitle, recipeSectionTitle }) {
@@ -322,10 +370,11 @@ function BuilderShell({ title, description, controls, customBlock, recipe, tab, 
 
 function SavoryBuilder() {
   const [goal, setGoal] = useState("lean");
-  const [proteinName, setProteinName] = useState("Chicken Breast");
+  const [proteinName, setProteinName] = useState("Chicken Breast Cooked");
   const [carbName, setCarbName] = useState("Rice Cooked");
   const [fatName, setFatName] = useState("Olive Oil");
   const [vegName, setVegName] = useState("Broccoli");
+  const [flavor, setFlavor] = useState("Garlic Herb");
   const [chefMode, setChefMode] = useState("chef");
   const [portionMode, setPortionMode] = useState("auto");
   const [category, setCategory] = useState("bowl");
@@ -343,30 +392,44 @@ function SavoryBuilder() {
     const fatG = fat.name === "None" ? 0 : (portionMode === "custom" ? custom.fat : fat.grams[goal]);
     const vegG = portionMode === "custom" ? custom.veg : veg.grams[goal];
     const total = addMacros([calcMacros(protein, proteinG), calcMacros(carb, carbG), calcMacros(fat, fatG), calcMacros(veg, vegG)]);
+
     const totalTime = Math.max(protein.cookTime, carb.cookTime, veg.cookTime, 1);
     const timeline = [
-      { name: carb.name, displayName: carb.name === "Rice Cooked" ? "Rice" : carb.name, startAt: Math.max(totalTime - carb.cookTime, 0), duration: carb.cookTime, prepTime: 3, cookTime: Math.max(carb.cookTime - 3, 1) },
-      { name: protein.name, displayName: smartSavoryProtein(protein.name), startAt: Math.max(totalTime - protein.cookTime, 0), duration: protein.cookTime, prepTime: 4, cookTime: Math.max(protein.cookTime - 4, 1) },
-      { name: veg.name, displayName: veg.name, startAt: Math.max(totalTime - veg.cookTime, 0), duration: veg.cookTime, prepTime: 2, cookTime: Math.max(veg.cookTime - 2, 1) },
+      { displayName: optionLabel(carb.name), startAt: Math.max(totalTime - carb.cookTime, 0), duration: carb.cookTime, prepTime: 3, cookTime: Math.max(carb.cookTime - 3, 1) },
+      { displayName: optionLabel(protein.name), startAt: Math.max(totalTime - protein.cookTime, 0), duration: protein.cookTime, prepTime: 4, cookTime: Math.max(protein.cookTime - 4, 1) },
+      { displayName: veg.name, startAt: Math.max(totalTime - veg.cookTime, 0), duration: veg.cookTime, prepTime: 2, cookTime: Math.max(veg.cookTime - 2, 1) },
     ].sort((a, b) => a.startAt - b.startAt);
+
     const baseSteps = [
       `Start the ${timeline[0].displayName.toLowerCase()} first because it takes the longest.`,
-      `Prepare the ${protein.name.toLowerCase()} while the first item cooks.`,
-      `Start the ${protein.name.toLowerCase()} so it finishes at the same time as the rest.`,
-      `Cook the ${veg.name.toLowerCase()} near the end so it stays fresh.`,
+      `Prep the ${protein.name.toLowerCase()} while the first item cooks.`,
+      `Cook the ${protein.name.toLowerCase()} so it finishes with the rest of the meal.`,
+      `Cook the ${veg.name.toLowerCase()} near the end so it stays fresher.`,
       fatG > 0 ? `Add ${fat.name.toLowerCase()} at the end for better texture and flavor.` : `Skip added fat and keep the finish lighter.`,
-      `Assemble as a ${category.replace("_", " ")} and serve immediately.`,
+      `Finish with the ${flavor.toLowerCase()} profile and serve as a ${category.replace("_", " ")}.`,
     ];
-    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([`Chef note: with goal set to ${goalLabels[goal]}, Auto mode changes portions and macros automatically.`, `Final check: taste, texture, and temperature before plating.`]);
+
+    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([
+      `Chef note: with goal set to ${goalLabels[goal]}, Auto mode changes the portions and macros automatically.`,
+      `Final check: taste, texture, and temperature before plating.`,
+    ]);
 
     return {
-      title: `${goalLabels[goal]} ${protein.name} + ${carb.name}`,
-      smartTitle: `${goalLabels[goal]} ${smartSavoryProtein(protein.name)} ${category === "bowl" ? "Power Bowl" : category === "sandwich" ? "Stack" : category === "breakfast" ? "Breakfast Build" : "Prep Box"} with ${carb.name === "Rice Cooked" ? "Rice" : carb.name}`,
+      title: `${goalLabels[goal]} ${optionLabel(protein.name)} + ${optionLabel(carb.name)}`,
+      smartTitle: `${goalLabels[goal]} ${flavor} ${optionLabel(protein.name)} ${category === "bowl" ? "Power Bowl" : category === "sandwich" ? "Stack" : category === "breakfast" ? "Breakfast Build" : "Prep Box"}`,
       ingredients: [`${proteinG}g ${protein.name}`, `${carbG}g ${carb.name}`, fatG > 0 ? `${fatG}g ${fat.name}` : null, `${vegG}g ${veg.name}`].filter(Boolean),
-      total, timeline, totalTime, steps,
-      snapshot: [{ label: smartSavoryProtein(protein.name), grams: proteinG }, { label: carb.name === "Rice Cooked" ? "Rice" : carb.name, grams: carbG }, ...(fatG > 0 ? [{ label: fat.name, grams: fatG }] : []), { label: veg.name, grams: vegG }],
+      total,
+      timeline,
+      totalTime,
+      steps,
+      snapshot: [
+        { label: optionLabel(protein.name), grams: proteinG },
+        { label: optionLabel(carb.name), grams: carbG },
+        ...(fatG > 0 ? [{ label: fat.name, grams: fatG }] : []),
+        { label: veg.name, grams: vegG },
+      ],
     };
-  }, [goal, protein, carb, fat, veg, chefMode, portionMode, custom, category]);
+  }, [goal, protein, carb, fat, veg, flavor, chefMode, portionMode, custom, category]);
 
   return (
     <BuilderShell
@@ -375,6 +438,7 @@ function SavoryBuilder() {
       controls={
         <>
           <SelectField label="Goal" value={goal} onChange={setGoal} options={Object.entries(goalLabels).map(([value, label]) => ({ value, label }))} />
+          <SelectField label="Flavor" value={flavor} onChange={setFlavor} options={savoryFlavors} />
           <SelectField label="Protein" value={proteinName} onChange={setProteinName} options={savoryProteins.map((x) => x.name)} />
           <SelectField label="Carb" value={carbName} onChange={setCarbName} options={savoryCarbs.map((x) => x.name)} />
           <SelectField label="Fat" value={fatName} onChange={setFatName} options={savoryFats.map((x) => x.name)} />
@@ -385,15 +449,15 @@ function SavoryBuilder() {
         </>
       }
       customBlock={portionMode === "custom" ? (
-        <CustomPortionBlock
-          title="Custom Meal Portions"
-          fields={[
-            <NumberField key="p" label="Protein (g)" value={custom.protein} onChange={(v) => setCustom((p) => ({ ...p, protein: v }))} helper={`${gramsToOunces(custom.protein)} oz`} />,
-            <NumberField key="c" label="Carb (g)" value={custom.carb} onChange={(v) => setCustom((p) => ({ ...p, carb: v }))} helper={`${gramsToOunces(custom.carb)} oz`} />,
-            <NumberField key="f" label="Fat (g)" value={custom.fat} onChange={(v) => setCustom((p) => ({ ...p, fat: v }))} helper={`${gramsToOunces(custom.fat)} oz`} />,
-            <NumberField key="v" label="Veg (g)" value={custom.veg} onChange={(v) => setCustom((p) => ({ ...p, veg: v }))} helper={`${gramsToOunces(custom.veg)} oz`} />,
-          ]}
-        />
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+          <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>Custom Meal Portions</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+            <NumberField label="Protein (g)" value={custom.protein} onChange={(v) => setCustom((p) => ({ ...p, protein: v }))} helper={`${gramsToOunces(custom.protein)} oz`} />
+            <NumberField label="Carb (g)" value={custom.carb} onChange={(v) => setCustom((p) => ({ ...p, carb: v }))} helper={`${gramsToOunces(custom.carb)} oz`} />
+            <NumberField label="Fat (g)" value={custom.fat} onChange={(v) => setCustom((p) => ({ ...p, fat: v }))} helper={`${gramsToOunces(custom.fat)} oz`} />
+            <NumberField label="Veg (g)" value={custom.veg} onChange={(v) => setCustom((p) => ({ ...p, veg: v }))} helper={`${gramsToOunces(custom.veg)} oz`} />
+          </div>
+        </div>
       ) : null}
       recipe={recipe}
       tab={tab}
@@ -428,35 +492,42 @@ function DessertBuilder() {
     const total = addMacros([calcMacros(base, baseG), calcMacros(carb, carbG), calcMacros(addon, addonG)]);
 
     const totalTime = Math.max(style.totalTime, 1);
-    const flow = style.flow;
-    const segment = Math.max(Math.floor(totalTime / flow.length), 1);
-
-    const timeline = flow.map((step, index) => ({
-      name: step,
+    const segment = Math.max(Math.floor(totalTime / style.flow.length), 1);
+    const timeline = style.flow.map((step, index) => ({
       displayName: step,
       startAt: Math.min(index * segment, totalTime - 1),
-      duration: index === flow.length - 1 ? Math.max(totalTime - index * segment, 1) : segment,
+      duration: index === style.flow.length - 1 ? Math.max(totalTime - index * segment, 1) : segment,
       prepTime: step === "Blend" || step === "Whisk" || step === "Mix" ? 2 : 1,
       cookTime: step === "Freeze" || step === "Chill" || step === "Cook" || step === "Spin" ? Math.max(segment - 1, 1) : 0,
     }));
 
     const baseSteps = [
       `Start with the ${style.name.toLowerCase()} base first because it controls the overall dessert texture.`,
-      `${flow[0]} the base until smooth and consistent.`,
-      `${flow[1]} the dessert to build the right body and texture.`,
+      `${style.flow[0]} the base until smooth and consistent.`,
+      `${style.flow[1]} the dessert to build the right body and texture.`,
       addonG > 0 ? `Add the ${addon.name.toLowerCase()} late so it stays noticeable in the final texture.` : `Skip the add-on and keep the dessert lighter and cleaner.`,
-      `${flow[2]} the dessert if needed for the final texture.`,
-      `Finish with the ${flavor.toLowerCase()} profile and ${flow[3].toLowerCase()} once the texture feels right.`,
+      `${style.flow[2]} the dessert if needed for the final texture.`,
+      `Finish with the ${flavor.toLowerCase()} profile and ${style.flow[3].toLowerCase()} once the texture feels right.`,
     ];
 
-    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([`Chef note: dessert timing here is texture based, not hot-food timing based.`, `With goal set to ${goalLabels[goal]}, Auto mode changes the dessert grams and macros automatically.`]);
+    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([
+      `Chef note: dessert timing here is texture based, not hot-food timing based.`,
+      `With goal set to ${goalLabels[goal]}, Auto mode changes the dessert grams and macros automatically.`,
+    ]);
 
     return {
       title: `${goalLabels[goal]} ${flavor} ${style.name}`,
       smartTitle: `${goalLabels[goal]} ${flavor} ${style.name} Builder`,
       ingredients: [`${baseG}g ${base.name}`, `${carbG}g ${carb.name}`, addonG > 0 ? `${addonG}g ${addon.name}` : null].filter(Boolean),
-      total, timeline, totalTime, steps,
-      snapshot: [{ label: base.name, grams: baseG }, { label: carb.name, grams: carbG }, ...(addonG > 0 ? [{ label: addon.name, grams: addonG }] : [])],
+      total,
+      timeline,
+      totalTime,
+      steps,
+      snapshot: [
+        { label: optionLabel(base.name), grams: baseG },
+        { label: optionLabel(carb.name), grams: carbG },
+        ...(addonG > 0 ? [{ label: addon.name, grams: addonG }] : []),
+      ],
     };
   }, [goal, base, carb, addon, style, flavor, chefMode, portionMode, custom]);
 
@@ -468,7 +539,7 @@ function DessertBuilder() {
         <>
           <SelectField label="Goal" value={goal} onChange={setGoal} options={Object.entries(goalLabels).map(([value, label]) => ({ value, label }))} />
           <SelectField label="Dessert Style" value={styleName} onChange={setStyleName} options={dessertStyles.map((x) => x.name)} />
-          <SelectField label="Flavor" value={flavor} onChange={setFlavor} options={["Vanilla", "Chocolate", "Strawberry", "Birthday Cake", "Biscoff", "Brownie Batter"]} />
+          <SelectField label="Flavor" value={flavor} onChange={setFlavor} options={dessertFlavors} />
           <SelectField label="Base" value={baseName} onChange={setBaseName} options={dessertBases.map((x) => x.name)} />
           <SelectField label="Carb" value={carbName} onChange={setCarbName} options={dessertCarbs.map((x) => x.name)} />
           <SelectField label="Add-on" value={addonName} onChange={setAddonName} options={dessertAddons.map((x) => x.name)} />
@@ -477,14 +548,14 @@ function DessertBuilder() {
         </>
       }
       customBlock={portionMode === "custom" ? (
-        <CustomPortionBlock
-          title="Custom Dessert Portions"
-          fields={[
-            <NumberField key="b" label="Base (g)" value={custom.base} onChange={(v) => setCustom((p) => ({ ...p, base: v }))} helper={`${gramsToOunces(custom.base)} oz`} />,
-            <NumberField key="c" label="Carb (g)" value={custom.carb} onChange={(v) => setCustom((p) => ({ ...p, carb: v }))} helper={`${gramsToOunces(custom.carb)} oz`} />,
-            <NumberField key="a" label="Add-on (g)" value={custom.addon} onChange={(v) => setCustom((p) => ({ ...p, addon: v }))} helper={`${gramsToOunces(custom.addon)} oz`} />,
-          ]}
-        />
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+          <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>Custom Dessert Portions</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+            <NumberField label="Base (g)" value={custom.base} onChange={(v) => setCustom((p) => ({ ...p, base: v }))} helper={`${gramsToOunces(custom.base)} oz`} />
+            <NumberField label="Carb (g)" value={custom.carb} onChange={(v) => setCustom((p) => ({ ...p, carb: v }))} helper={`${gramsToOunces(custom.carb)} oz`} />
+            <NumberField label="Add-on (g)" value={custom.addon} onChange={(v) => setCustom((p) => ({ ...p, addon: v }))} helper={`${gramsToOunces(custom.addon)} oz`} />
+          </div>
+        </div>
       ) : null}
       recipe={recipe}
       tab={tab}
@@ -509,14 +580,14 @@ export default function Page() {
                 Master Elite Recipe App
               </h1>
               <p style={{ margin: 0, color: theme.subtext, fontSize: 16, lineHeight: 1.7 }}>
-                This is the true master app version going forward: dessert and savory now follow the same stronger builder system, while desserts use a texture-based timeline instead of hot-food sequencing.
+                Expanded with your broader ingredient library and your full dessert flavor list. This is the master build going forward.
               </p>
             </div>
             <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
               <Tag>Dessert</Tag>
               <Tag>Savory</Tag>
-              <Tag>Meal Plans</Tag>
-              <Tag>Master Build</Tag>
+              <Tag>Expanded Items</Tag>
+              <Tag>Full Flavors</Tag>
             </div>
           </div>
         </div>
@@ -529,9 +600,9 @@ export default function Page() {
         {appTab === "dessert" ? <DessertBuilder /> : <SavoryBuilder />}
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginTop: 20 }}>
-          <InfoCard title="Master Standard" body="Dessert and savory now share the same stronger system structure so future updates can stack on one foundation." />
-          <InfoCard title="Texture Timeline" body="Dessert uses a texture-based timeline flow like blend, chill, spin, or serve instead of hot-food finish timing." />
-          <InfoCard title="Goal Logic" body="Lean, Low Cal, Anabolic, and Bulk change grams and macros in Auto mode across both sides." />
+          <InfoCard title="Expanded Savory Library" body="Added your broader savory proteins, carbs, fats, and vegetables so the builder covers more of your real meal plan options." />
+          <InfoCard title="Full Dessert Flavors" body="Added the larger dessert flavor list we built earlier so your flavor selector has more range for the dessert side." />
+          <InfoCard title="Master App Base" body="This version is meant to be the stronger master foundation for future updates to both desserts and savory meals." />
         </div>
       </div>
     </div>
