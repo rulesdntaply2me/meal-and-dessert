@@ -65,6 +65,41 @@ const dessertGoalDescriptions = {
   bulk: "Higher energy dessert build with more carbs and fats.",
 };
 
+function round1(num) {
+  return Math.round(num * 10) / 10;
+}
+
+function calcMacros(item, grams) {
+  if (!item || grams <= 0) return { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  const factor = grams / 100;
+  return {
+    calories: round1(item.macrosPer100.calories * factor),
+    protein: round1(item.macrosPer100.protein * factor),
+    carbs: round1(item.macrosPer100.carbs * factor),
+    fat: round1(item.macrosPer100.fat * factor),
+  };
+}
+
+function addMacros(parts) {
+  return parts.reduce(
+    (acc, part) => ({
+      calories: round1(acc.calories + (part?.calories || 0)),
+      protein: round1(acc.protein + (part?.protein || 0)),
+      carbs: round1(acc.carbs + (part?.carbs || 0)),
+      fat: round1(acc.fat + (part?.fat || 0)),
+    }),
+    { calories: 0, protein: 0, carbs: 0, fat: 0 }
+  );
+}
+
+function gramsToOunces(grams) {
+  return round1(grams / 28.3495);
+}
+
+function smartSavoryProtein(name) {
+  return name.replace(" Breast", "").replace(" 90/10", "");
+}
+
 const savoryProteins = [
   { name: "Chicken Breast", macrosPer100: { calories: 165, protein: 31, carbs: 0, fat: 3.6 }, grams: { low_cal: 130, lean: 150, anabolic: 200, bulk: 180 }, cookTime: 17 },
   { name: "Lean Ground Beef 90/10", macrosPer100: { calories: 176, protein: 26, carbs: 0, fat: 10 }, grams: { low_cal: 120, lean: 150, anabolic: 140, bulk: 180 }, cookTime: 13 },
@@ -122,10 +157,6 @@ const dessertStyles = [
   { name: "Mug Cake", flow: ["Mix", "Cook", "Rest", "Serve"], totalTime: 10 },
   { name: "Cookie Dough", flow: ["Mix", "Fold", "Chill", "Serve"], totalTime: 6 },
 ];
-
-function smartSavoryProtein(name) {
-  return name.replace(" Breast", "").replace(" 90/10", "");
-}
 
 function SelectField({ label, value, onChange, options }) {
   return (
@@ -197,6 +228,98 @@ function tabButtonStyle(isActive) {
   };
 }
 
+function CustomPortionBlock({ title, fields }) {
+  return (
+    <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+      <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>{title}</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>{fields}</div>
+    </div>
+  );
+}
+
+function BuilderShell({ title, description, controls, customBlock, recipe, tab, setTab, snapshotTitle, recipeSectionTitle }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: 20 }}>
+      <div style={{ ...cardStyle, padding: 24 }}>
+        <div style={{ fontSize: 30, fontWeight: 700, marginBottom: 16, fontFamily: theme.headingFont }}>{title}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>{controls}</div>
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+          <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>Mode Guide</div>
+          <div style={{ color: theme.subtext, fontSize: 13, lineHeight: 1.7 }}>
+            <strong style={{ color: theme.text }}>Auto</strong> changes grams and macros when the goal changes. <strong style={{ color: theme.text }}>Custom</strong> keeps your typed grams locked.
+          </div>
+        </div>
+        <p style={{ margin: "14px 0 0", color: theme.subtext, fontSize: 13, lineHeight: 1.6 }}>{description}</p>
+        {customBlock}
+      </div>
+
+      <div style={{ ...cardStyle, padding: 24 }}>
+        <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>{recipeSectionTitle}</div>
+        <h2 style={{ margin: "10px 0 8px", fontSize: 36, lineHeight: 1.08, fontFamily: theme.headingFont }}>{recipe.smartTitle}</h2>
+        <div style={{ color: theme.accent, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>{recipe.title}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(135px, 1fr))", gap: 12, marginBottom: 20 }}>
+          <StatCard label="Calories" value={`${recipe.total.calories}`} />
+          <StatCard label="Protein" value={`${recipe.total.protein}g`} />
+          <StatCard label="Carbs" value={`${recipe.total.carbs}g`} />
+          <StatCard label="Fat" value={`${recipe.total.fat}g`} />
+        </div>
+
+        <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+          <button onClick={() => setTab("ingredients")} style={tabButtonStyle(tab === "ingredients")}>Ingredients</button>
+          <button onClick={() => setTab("instructions")} style={tabButtonStyle(tab === "instructions")}>Instructions</button>
+          <button onClick={() => setTab("timeline")} style={tabButtonStyle(tab === "timeline")}>Timeline</button>
+        </div>
+
+        {tab === "ingredients" && (
+          <>
+            <div style={{ marginBottom: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+              <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>{snapshotTitle}</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
+                {recipe.snapshot.map((item) => <MiniPortionCard key={item.label} label={item.label} grams={item.grams} />)}
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+              {recipe.ingredients.map((ingredient) => <div key={ingredient} style={{ border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>{ingredient}</div>)}
+            </div>
+          </>
+        )}
+
+        {tab === "instructions" && (
+          <div style={{ display: "grid", gap: 12 }}>
+            {recipe.steps.map((instruction, index) => (
+              <div key={index} style={{ display: "flex", gap: 14, border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>
+                <div style={{ minWidth: 34, height: 34, borderRadius: 999, background: theme.accent, color: "#111", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14 }}>{index + 1}</div>
+                <div style={{ color: theme.subtext, lineHeight: 1.7 }}>{instruction}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === "timeline" && (
+          <div style={{ display: "grid", gap: 14 }}>
+            {recipe.timeline.map((entry, index) => {
+              const left = recipe.totalTime > 0 ? `${(entry.startAt / recipe.totalTime) * 100}%` : "0%";
+              const width = recipe.totalTime > 0 ? `${(entry.duration / recipe.totalTime) * 100}%` : "0%";
+              return (
+                <div key={index} style={{ border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 8 }}>
+                    <div style={{ color: theme.text, fontWeight: 700 }}>{entry.displayName}</div>
+                    <div style={{ color: theme.accent, fontWeight: 700 }}>Start at {entry.startAt} min</div>
+                  </div>
+                  <div style={{ color: theme.subtext, lineHeight: 1.7, marginBottom: 8 }}>Duration: {entry.duration} min total • Prep: {entry.prepTime} min • Action Time: {entry.cookTime} min</div>
+                  <div style={{ position: "relative", height: 12, borderRadius: 999, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
+                    <div style={{ position: "absolute", left, width, top: 0, bottom: 0, borderRadius: 999, background: `linear-gradient(90deg, ${theme.accent} 0%, #e7c98f 100%)` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function SavoryBuilder() {
   const [goal, setGoal] = useState("lean");
   const [proteinName, setProteinName] = useState("Chicken Breast");
@@ -220,14 +343,12 @@ function SavoryBuilder() {
     const fatG = fat.name === "None" ? 0 : (portionMode === "custom" ? custom.fat : fat.grams[goal]);
     const vegG = portionMode === "custom" ? custom.veg : veg.grams[goal];
     const total = addMacros([calcMacros(protein, proteinG), calcMacros(carb, carbG), calcMacros(fat, fatG), calcMacros(veg, vegG)]);
-
     const totalTime = Math.max(protein.cookTime, carb.cookTime, veg.cookTime, 1);
     const timeline = [
       { name: carb.name, displayName: carb.name === "Rice Cooked" ? "Rice" : carb.name, startAt: Math.max(totalTime - carb.cookTime, 0), duration: carb.cookTime, prepTime: 3, cookTime: Math.max(carb.cookTime - 3, 1) },
       { name: protein.name, displayName: smartSavoryProtein(protein.name), startAt: Math.max(totalTime - protein.cookTime, 0), duration: protein.cookTime, prepTime: 4, cookTime: Math.max(protein.cookTime - 4, 1) },
       { name: veg.name, displayName: veg.name, startAt: Math.max(totalTime - veg.cookTime, 0), duration: veg.cookTime, prepTime: 2, cookTime: Math.max(veg.cookTime - 2, 1) },
     ].sort((a, b) => a.startAt - b.startAt);
-
     const baseSteps = [
       `Start the ${timeline[0].displayName.toLowerCase()} first because it takes the longest.`,
       `Prepare the ${protein.name.toLowerCase()} while the first item cooks.`,
@@ -236,11 +357,7 @@ function SavoryBuilder() {
       fatG > 0 ? `Add ${fat.name.toLowerCase()} at the end for better texture and flavor.` : `Skip added fat and keep the finish lighter.`,
       `Assemble as a ${category.replace("_", " ")} and serve immediately.`,
     ];
-
-    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([
-      `Chef note: with goal set to ${goalLabels[goal]}, Auto mode changes portions and macros automatically.`,
-      `Final check: taste, texture, and temperature before plating.`,
-    ]);
+    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([`Chef note: with goal set to ${goalLabels[goal]}, Auto mode changes portions and macros automatically.`, `Final check: taste, texture, and temperature before plating.`]);
 
     return {
       title: `${goalLabels[goal]} ${protein.name} + ${carb.name}`,
@@ -332,10 +449,7 @@ function DessertBuilder() {
       `Finish with the ${flavor.toLowerCase()} profile and ${flow[3].toLowerCase()} once the texture feels right.`,
     ];
 
-    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([
-      `Chef note: dessert timing here is texture based, not hot-food timing based.`,
-      `With goal set to ${goalLabels[goal]}, Auto mode changes the dessert grams and macros automatically.`,
-    ]);
+    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([`Chef note: dessert timing here is texture based, not hot-food timing based.`, `With goal set to ${goalLabels[goal]}, Auto mode changes the dessert grams and macros automatically.`]);
 
     return {
       title: `${goalLabels[goal]} ${flavor} ${style.name}`,
@@ -378,102 +492,6 @@ function DessertBuilder() {
       snapshotTitle="Dessert Portion Snapshot"
       recipeSectionTitle="Generated Dessert"
     />
-  );
-}
-
-function CustomPortionBlock({ title, fields }) {
-  return (
-    <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-      <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>{title}</div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
-        {fields}
-      </div>
-    </div>
-  );
-}
-
-function BuilderShell({ title, description, controls, customBlock, recipe, tab, setTab, snapshotTitle, recipeSectionTitle }) {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: 20 }}>
-      <div style={{ ...cardStyle, padding: 24 }}>
-        <div style={{ fontSize: 30, fontWeight: 700, marginBottom: 16, fontFamily: theme.headingFont }}>{title}</div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
-          {controls}
-        </div>
-        <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-          <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>Mode Guide</div>
-          <div style={{ color: theme.subtext, fontSize: 13, lineHeight: 1.7 }}>
-            <strong style={{ color: theme.text }}>Auto</strong> changes grams and macros when the goal changes. <strong style={{ color: theme.text }}>Custom</strong> keeps your typed grams locked.
-          </div>
-        </div>
-        <p style={{ margin: "14px 0 0", color: theme.subtext, fontSize: 13, lineHeight: 1.6 }}>{description}</p>
-        {customBlock}
-      </div>
-
-      <div style={{ ...cardStyle, padding: 24 }}>
-        <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>{recipeSectionTitle}</div>
-        <h2 style={{ margin: "10px 0 8px", fontSize: 36, lineHeight: 1.08, fontFamily: theme.headingFont }}>{recipe.smartTitle}</h2>
-        <div style={{ color: theme.accent, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>{recipe.title}</div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(135px, 1fr))", gap: 12, marginBottom: 20 }}>
-          <StatCard label="Calories" value={`${recipe.total.calories}`} />
-          <StatCard label="Protein" value={`${recipe.total.protein}g`} />
-          <StatCard label="Carbs" value={`${recipe.total.carbs}g`} />
-          <StatCard label="Fat" value={`${recipe.total.fat}g`} />
-        </div>
-
-        <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
-          <button onClick={() => setTab("ingredients")} style={tabButtonStyle(tab === "ingredients")}>Ingredients</button>
-          <button onClick={() => setTab("instructions")} style={tabButtonStyle(tab === "instructions")}>Instructions</button>
-          <button onClick={() => setTab("timeline")} style={tabButtonStyle(tab === "timeline")}>Timeline</button>
-        </div>
-
-        {tab === "ingredients" && (
-          <>
-            <div style={{ marginBottom: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-              <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>{snapshotTitle}</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
-                {recipe.snapshot.map((item) => <MiniPortionCard key={item.label} label={item.label} grams={item.grams} />)}
-              </div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
-              {recipe.ingredients.map((ingredient) => <div key={ingredient} style={{ border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>{ingredient}</div>)}
-            </div>
-          </>
-        )}
-
-        {tab === "instructions" && (
-          <div style={{ display: "grid", gap: 12 }}>
-            {recipe.steps.map((instruction, index) => (
-              <div key={index} style={{ display: "flex", gap: 14, border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>
-                <div style={{ minWidth: 34, height: 34, borderRadius: 999, background: theme.accent, color: "#111", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14 }}>{index + 1}</div>
-                <div style={{ color: theme.subtext, lineHeight: 1.7 }}>{instruction}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tab === "timeline" && (
-          <div style={{ display: "grid", gap: 14 }}>
-            {recipe.timeline.map((entry, index) => {
-              const left = recipe.totalTime > 0 ? `${(entry.startAt / recipe.totalTime) * 100}%` : "0%";
-              const width = recipe.totalTime > 0 ? `${(entry.duration / recipe.totalTime) * 100}%` : "0%";
-              return (
-                <div key={index} style={{ border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 8 }}>
-                    <div style={{ color: theme.text, fontWeight: 700 }}>{entry.displayName}</div>
-                    <div style={{ color: theme.accent, fontWeight: 700 }}>Start at {entry.startAt} min</div>
-                  </div>
-                  <div style={{ color: theme.subtext, lineHeight: 1.7, marginBottom: 8 }}>Duration: {entry.duration} min total • Prep: {entry.prepTime} min • Action Time: {entry.cookTime} min</div>
-                  <div style={{ position: "relative", height: 12, borderRadius: 999, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", left, width, top: 0, bottom: 0, borderRadius: 999, background: `linear-gradient(90deg, ${theme.accent} 0%, #e7c98f 100%)` }} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
   );
 }
 

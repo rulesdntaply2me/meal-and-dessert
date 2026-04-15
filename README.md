@@ -1,9 +1,9 @@
 # Sclass Master Elite App
 
-Master version going forward:
+Fixed runtime helper issue:
+- addMacros and calcMacros explicitly defined
 - Dessert + Savory in one app
-- Dessert now follows the same stronger builder structure as savory
-- Dessert timeline is texture-based
+- Dessert uses texture-based timeline
 - Auto/custom portion logic on both sides
 - Goal changes grams and macros in Auto mode
 
