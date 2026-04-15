@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Sclass Elite Recipe App",
-  description: "Combined dessert and savory builder for Sclass Fitness",
+  title: "Sclass Master Elite App",
+  description: "Dessert + Savory master app for Sclass Fitness",
 };
 
 export default function RootLayout({ children }) {
