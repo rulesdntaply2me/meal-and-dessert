@@ -16,6 +16,41 @@ const theme = {
   bodyFont: "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 };
 
+const cardStyle = {
+  background: `linear-gradient(180deg, ${theme.card} 0%, ${theme.cardAlt} 100%)`,
+  border: `1px solid ${theme.border}`,
+  borderRadius: 24,
+  boxShadow: "0 14px 40px rgba(0,0,0,0.34)",
+};
+
+const sectionTitleStyle = {
+  fontSize: 12,
+  textTransform: "uppercase",
+  letterSpacing: "0.24em",
+  color: theme.accent,
+  fontWeight: 700,
+};
+
+const selectStyle = {
+  height: 50,
+  borderRadius: 16,
+  border: `1px solid ${theme.border}`,
+  padding: "0 14px",
+  fontSize: 15,
+  background: theme.bgSoft,
+  color: theme.text,
+  outline: "none",
+  width: "100%",
+  boxSizing: "border-box",
+};
+
+const goalLabels = {
+  low_cal: "Low Cal",
+  lean: "Lean",
+  anabolic: "Anabolic",
+  bulk: "Bulk",
+};
+
 function round1(num) {
   return Math.round(num * 10) / 10;
 }
@@ -47,77 +82,15 @@ function gramsToOunces(grams) {
   return round1(grams / 28.3495);
 }
 
-const savoryProteins = [
-  { name: "Chicken Breast", unit: "g", macrosPer100: { calories: 165, protein: 31, carbs: 0, fat: 3.6 }, grams: { lean: 150, anabolic: 200, bulk: 180, low_cal: 130 } },
-  { name: "Lean Ground Beef 90/10", unit: "g", macrosPer100: { calories: 176, protein: 26, carbs: 0, fat: 10 }, grams: { lean: 150, anabolic: 140, bulk: 180, low_cal: 120 } },
-  { name: "Salmon", unit: "g", macrosPer100: { calories: 208, protein: 20, carbs: 0, fat: 13 }, grams: { lean: 150, anabolic: 150, bulk: 180, low_cal: 120 } },
-  { name: "Turkey Breast Deli", unit: "g", macrosPer100: { calories: 104, protein: 17, carbs: 3, fat: 2 }, grams: { lean: 120, anabolic: 150, bulk: 140, low_cal: 100 } },
-  { name: "Egg Whites", unit: "g", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { lean: 220, anabolic: 280, bulk: 220, low_cal: 200 } },
-];
-
-const savoryCarbs = [
-  { name: "Rice Cooked", unit: "g", macrosPer100: { calories: 130, protein: 2.7, carbs: 28, fat: 0.3 }, grams: { lean: 150, anabolic: 120, bulk: 220, low_cal: 100 } },
-  { name: "Potato", unit: "g", macrosPer100: { calories: 87, protein: 1.9, carbs: 20, fat: 0.1 }, grams: { lean: 200, anabolic: 150, bulk: 280, low_cal: 120 } },
-  { name: "Sweet Potato", unit: "g", macrosPer100: { calories: 86, protein: 1.6, carbs: 20, fat: 0.1 }, grams: { lean: 180, anabolic: 150, bulk: 250, low_cal: 120 } },
-  { name: "Bread", unit: "g", macrosPer100: { calories: 265, protein: 9, carbs: 49, fat: 3.2 }, grams: { lean: 60, anabolic: 60, bulk: 100, low_cal: 50 } },
-  { name: "Bagel", unit: "g", macrosPer100: { calories: 250, protein: 10, carbs: 49, fat: 1.5 }, grams: { lean: 75, anabolic: 75, bulk: 110, low_cal: 55 } },
-];
-
-const savoryFats = [
-  { name: "None", unit: "g", macrosPer100: { calories: 0, protein: 0, carbs: 0, fat: 0 }, grams: { lean: 0, anabolic: 0, bulk: 0, low_cal: 0 } },
-  { name: "Olive Oil", unit: "g", macrosPer100: { calories: 884, protein: 0, carbs: 0, fat: 100 }, grams: { lean: 5, anabolic: 5, bulk: 15, low_cal: 0 } },
-  { name: "Avocado", unit: "g", macrosPer100: { calories: 160, protein: 2, carbs: 9, fat: 15 }, grams: { lean: 40, anabolic: 35, bulk: 70, low_cal: 25 } },
-  { name: "Peanut Butter", unit: "g", macrosPer100: { calories: 588, protein: 25, carbs: 20, fat: 50 }, grams: { lean: 12, anabolic: 10, bulk: 24, low_cal: 8 } },
-];
-
-const savoryVeg = [
-  { name: "Broccoli", unit: "g", macrosPer100: { calories: 35, protein: 2.4, carbs: 7.2, fat: 0.4 }, grams: { lean: 120, anabolic: 150, bulk: 100, low_cal: 180 } },
-  { name: "Green Beans", unit: "g", macrosPer100: { calories: 31, protein: 1.8, carbs: 7, fat: 0.1 }, grams: { lean: 120, anabolic: 150, bulk: 100, low_cal: 180 } },
-  { name: "Asparagus", unit: "g", macrosPer100: { calories: 20, protein: 2.2, carbs: 3.9, fat: 0.1 }, grams: { lean: 120, anabolic: 150, bulk: 100, low_cal: 180 } },
-  { name: "Spinach", unit: "g", macrosPer100: { calories: 23, protein: 2.9, carbs: 3.6, fat: 0.4 }, grams: { lean: 80, anabolic: 100, bulk: 60, low_cal: 120 } },
-];
-
-const dessertBases = [
-  { name: "Greek Yogurt Nonfat", unit: "g", macrosPer100: { calories: 59, protein: 10, carbs: 3.6, fat: 0.4 }, grams: { lean: 200, anabolic: 250, bulk: 220, low_cal: 170 } },
-  { name: "Cottage Cheese Low-Fat", unit: "g", macrosPer100: { calories: 81, protein: 10.5, carbs: 4, fat: 2.3 }, grams: { lean: 180, anabolic: 220, bulk: 200, low_cal: 150 } },
-  { name: "Whey Isolate", unit: "g", macrosPer100: { calories: 372, protein: 86, carbs: 4, fat: 2 }, grams: { lean: 30, anabolic: 40, bulk: 35, low_cal: 25 } },
-  { name: "Egg Whites", unit: "g", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { lean: 180, anabolic: 240, bulk: 200, low_cal: 150 } },
-];
-
-const dessertCarbs = [
-  { name: "Oats Dry", unit: "g", macrosPer100: { calories: 389, protein: 16.9, carbs: 66.3, fat: 6.9 }, grams: { lean: 40, anabolic: 40, bulk: 70, low_cal: 25 } },
-  { name: "Cream of Rice Dry", unit: "g", macrosPer100: { calories: 370, protein: 6.7, carbs: 83, fat: 0.6 }, grams: { lean: 40, anabolic: 45, bulk: 70, low_cal: 25 } },
-  { name: "Banana", unit: "g", macrosPer100: { calories: 89, protein: 1.1, carbs: 23, fat: 0.3 }, grams: { lean: 100, anabolic: 100, bulk: 140, low_cal: 60 } },
-  { name: "Blueberries", unit: "g", macrosPer100: { calories: 57, protein: 0.7, carbs: 14.5, fat: 0.3 }, grams: { lean: 80, anabolic: 80, bulk: 120, low_cal: 60 } },
-];
-
-const dessertAddons = [
-  { name: "None", unit: "g", macrosPer100: { calories: 0, protein: 0, carbs: 0, fat: 0 }, grams: { lean: 0, anabolic: 0, bulk: 0, low_cal: 0 } },
-  { name: "Peanut Butter", unit: "g", macrosPer100: { calories: 588, protein: 25, carbs: 20, fat: 50 }, grams: { lean: 12, anabolic: 10, bulk: 24, low_cal: 8 } },
-  { name: "Almonds", unit: "g", macrosPer100: { calories: 579, protein: 21, carbs: 22, fat: 50 }, grams: { lean: 15, anabolic: 15, bulk: 28, low_cal: 10 } },
-];
-
-const dessertStyles = [
-  "Ice Cream",
-  "Cheesecake Bowl",
-  "Pudding",
-  "Mug Cake",
-  "Cookie Dough",
-];
-
 function SelectField({ label, value, onChange, options }) {
   return (
     <label style={{ display: "grid", gap: 8, minWidth: 0 }}>
       <span style={{ fontSize: 13, fontWeight: 700, color: theme.subtext, textTransform: "uppercase", letterSpacing: "0.12em" }}>{label}</span>
       <select value={value} onChange={(e) => onChange(e.target.value)} style={selectStyle}>
         {options.map((option) => {
-          const v = typeof option === "string" ? option : option.value;
-          const l = typeof option === "string" ? option : option.label;
-          return (
-            <option key={v} value={v}>
-              {l}
-            </option>
-          );
+          const val = typeof option === "string" ? option : option.value;
+          const lab = typeof option === "string" ? option : option.label;
+          return <option key={val} value={val}>{lab}</option>;
         })}
       </select>
     </label>
@@ -128,9 +101,24 @@ function NumberField({ label, value, onChange, helper }) {
   return (
     <label style={{ display: "grid", gap: 8, minWidth: 0 }}>
       <span style={{ fontSize: 13, fontWeight: 700, color: theme.subtext, textTransform: "uppercase", letterSpacing: "0.12em" }}>{label}</span>
-      <input type="number" min={0} step={1} value={value} onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))} style={selectStyle} />
+      <input
+        type="number"
+        min={0}
+        step={1}
+        value={value}
+        onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
+        style={selectStyle}
+      />
       {helper ? <span style={{ color: theme.subtext, fontSize: 12 }}>{helper}</span> : null}
     </label>
+  );
+}
+
+function Tag({ children }) {
+  return (
+    <span style={{ padding: "10px 14px", borderRadius: 999, border: `1px solid rgba(201,163,92,0.24)`, background: theme.accentSoft, color: theme.text, fontSize: 13, fontWeight: 700 }}>
+      {children}
+    </span>
   );
 }
 
@@ -143,11 +131,22 @@ function StatCard({ label, value }) {
   );
 }
 
-function Tag({ children }) {
+function InfoCard({ title, body }) {
   return (
-    <span style={{ padding: "10px 14px", borderRadius: 999, border: `1px solid rgba(201,163,92,0.24)`, background: theme.accentSoft, color: theme.text, fontSize: 13, fontWeight: 700 }}>
-      {children}
-    </span>
+    <div style={{ ...cardStyle, padding: 20, minWidth: 0 }}>
+      <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>{title}</div>
+      <div style={{ color: theme.subtext, lineHeight: 1.7 }}>{body}</div>
+    </div>
+  );
+}
+
+function MiniPortionCard({ label, grams }) {
+  return (
+    <div style={{ border: `1px solid ${theme.border}`, borderRadius: 14, padding: 12, background: "rgba(255,255,255,0.02)" }}>
+      <div style={{ color: theme.subtext, fontSize: 12, marginBottom: 6 }}>{label}</div>
+      <div style={{ color: theme.text, fontWeight: 700 }}>{grams}g</div>
+      <div style={{ color: theme.subtext, fontSize: 12 }}>{gramsToOunces(grams)} oz</div>
+    </div>
   );
 }
 
@@ -164,22 +163,67 @@ function tabButtonStyle(isActive) {
   };
 }
 
-function sectionHeader(text) {
-  return <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: "0.24em", color: theme.accent, fontWeight: 700 }}>{text}</div>;
-}
+const savoryProteins = [
+  { name: "Chicken Breast", macrosPer100: { calories: 165, protein: 31, carbs: 0, fat: 3.6 }, grams: { low_cal: 130, lean: 150, anabolic: 200, bulk: 180 } },
+  { name: "Lean Ground Beef 90/10", macrosPer100: { calories: 176, protein: 26, carbs: 0, fat: 10 }, grams: { low_cal: 120, lean: 150, anabolic: 140, bulk: 180 } },
+  { name: "Salmon", macrosPer100: { calories: 208, protein: 20, carbs: 0, fat: 13 }, grams: { low_cal: 120, lean: 150, anabolic: 150, bulk: 180 } },
+  { name: "Turkey Breast Deli", macrosPer100: { calories: 104, protein: 17, carbs: 3, fat: 2 }, grams: { low_cal: 100, lean: 120, anabolic: 150, bulk: 140 } },
+  { name: "Egg Whites", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { low_cal: 200, lean: 220, anabolic: 280, bulk: 220 } },
+];
 
-function EliteSavoryBuilder() {
+const savoryCarbs = [
+  { name: "Rice Cooked", macrosPer100: { calories: 130, protein: 2.7, carbs: 28, fat: 0.3 }, grams: { low_cal: 100, lean: 150, anabolic: 120, bulk: 220 }, time: 15 },
+  { name: "Potato", macrosPer100: { calories: 87, protein: 1.9, carbs: 20, fat: 0.1 }, grams: { low_cal: 120, lean: 200, anabolic: 150, bulk: 280 }, time: 40 },
+  { name: "Sweet Potato", macrosPer100: { calories: 86, protein: 1.6, carbs: 20, fat: 0.1 }, grams: { low_cal: 120, lean: 180, anabolic: 150, bulk: 250 }, time: 35 },
+  { name: "Bread", macrosPer100: { calories: 265, protein: 9, carbs: 49, fat: 3.2 }, grams: { low_cal: 50, lean: 60, anabolic: 60, bulk: 100 }, time: 4 },
+  { name: "Bagel", macrosPer100: { calories: 250, protein: 10, carbs: 49, fat: 1.5 }, grams: { low_cal: 55, lean: 75, anabolic: 75, bulk: 110 }, time: 8 },
+];
+
+const savoryFats = [
+  { name: "None", macrosPer100: { calories: 0, protein: 0, carbs: 0, fat: 0 }, grams: { low_cal: 0, lean: 0, anabolic: 0, bulk: 0 } },
+  { name: "Olive Oil", macrosPer100: { calories: 884, protein: 0, carbs: 0, fat: 100 }, grams: { low_cal: 0, lean: 5, anabolic: 5, bulk: 15 } },
+  { name: "Avocado", macrosPer100: { calories: 160, protein: 2, carbs: 9, fat: 15 }, grams: { low_cal: 25, lean: 40, anabolic: 35, bulk: 70 } },
+  { name: "Peanut Butter", macrosPer100: { calories: 588, protein: 25, carbs: 20, fat: 50 }, grams: { low_cal: 8, lean: 12, anabolic: 10, bulk: 24 } },
+];
+
+const savoryVeg = [
+  { name: "Broccoli", macrosPer100: { calories: 35, protein: 2.4, carbs: 7.2, fat: 0.4 }, grams: { low_cal: 180, lean: 120, anabolic: 150, bulk: 100 }, time: 8 },
+  { name: "Green Beans", macrosPer100: { calories: 31, protein: 1.8, carbs: 7, fat: 0.1 }, grams: { low_cal: 180, lean: 120, anabolic: 150, bulk: 100 }, time: 8 },
+  { name: "Asparagus", macrosPer100: { calories: 20, protein: 2.2, carbs: 3.9, fat: 0.1 }, grams: { low_cal: 180, lean: 120, anabolic: 150, bulk: 100 }, time: 7 },
+  { name: "Spinach", macrosPer100: { calories: 23, protein: 2.9, carbs: 3.6, fat: 0.4 }, grams: { low_cal: 120, lean: 80, anabolic: 100, bulk: 60 }, time: 4 },
+];
+
+const dessertBases = [
+  { name: "Greek Yogurt Nonfat", macrosPer100: { calories: 59, protein: 10, carbs: 3.6, fat: 0.4 }, grams: { low_cal: 170, lean: 200, anabolic: 250, bulk: 220 } },
+  { name: "Cottage Cheese Low-Fat", macrosPer100: { calories: 81, protein: 10.5, carbs: 4, fat: 2.3 }, grams: { low_cal: 150, lean: 180, anabolic: 220, bulk: 200 } },
+  { name: "Whey Isolate", macrosPer100: { calories: 372, protein: 86, carbs: 4, fat: 2 }, grams: { low_cal: 25, lean: 30, anabolic: 40, bulk: 35 } },
+  { name: "Egg Whites", macrosPer100: { calories: 52, protein: 11, carbs: 1, fat: 0.2 }, grams: { low_cal: 150, lean: 180, anabolic: 240, bulk: 200 } },
+];
+
+const dessertCarbs = [
+  { name: "Oats Dry", macrosPer100: { calories: 389, protein: 16.9, carbs: 66.3, fat: 6.9 }, grams: { low_cal: 25, lean: 40, anabolic: 40, bulk: 70 } },
+  { name: "Cream of Rice Dry", macrosPer100: { calories: 370, protein: 6.7, carbs: 83, fat: 0.6 }, grams: { low_cal: 25, lean: 40, anabolic: 45, bulk: 70 } },
+  { name: "Banana", macrosPer100: { calories: 89, protein: 1.1, carbs: 23, fat: 0.3 }, grams: { low_cal: 60, lean: 100, anabolic: 100, bulk: 140 } },
+  { name: "Blueberries", macrosPer100: { calories: 57, protein: 0.7, carbs: 14.5, fat: 0.3 }, grams: { low_cal: 60, lean: 80, anabolic: 80, bulk: 120 } },
+];
+
+const dessertAddons = [
+  { name: "None", macrosPer100: { calories: 0, protein: 0, carbs: 0, fat: 0 }, grams: { low_cal: 0, lean: 0, anabolic: 0, bulk: 0 } },
+  { name: "Peanut Butter", macrosPer100: { calories: 588, protein: 25, carbs: 20, fat: 50 }, grams: { low_cal: 8, lean: 12, anabolic: 10, bulk: 24 } },
+  { name: "Almonds", macrosPer100: { calories: 579, protein: 21, carbs: 22, fat: 50 }, grams: { low_cal: 10, lean: 15, anabolic: 15, bulk: 28 } },
+];
+
+function SavoryBuilder() {
   const [goal, setGoal] = useState("lean");
   const [proteinName, setProteinName] = useState("Chicken Breast");
   const [carbName, setCarbName] = useState("Rice Cooked");
   const [fatName, setFatName] = useState("Olive Oil");
   const [vegName, setVegName] = useState("Broccoli");
-  const [style, setStyle] = useState("pan");
-  const [category, setCategory] = useState("bowl");
   const [chefMode, setChefMode] = useState("chef");
   const [portionMode, setPortionMode] = useState("auto");
-  const [tab, setTab] = useState("ingredients");
+  const [category, setCategory] = useState("bowl");
   const [custom, setCustom] = useState({ protein: 150, carb: 150, fat: 5, veg: 120 });
+  const [tab, setTab] = useState("ingredients");
 
   const protein = savoryProteins.find((x) => x.name === proteinName);
   const carb = savoryCarbs.find((x) => x.name === carbName);
@@ -199,26 +243,30 @@ function EliteSavoryBuilder() {
       calcMacros(veg, vegG),
     ]);
 
-    const estimatedTime = Math.max(
-      style === "air_fryer" && carb.name === "Potato" ? 40 : carb.name === "Rice Cooked" ? 15 : carb.name === "Bagel" ? 8 : 12,
-      protein.name === "Chicken Breast" ? 17 : protein.name === "Salmon" ? 14 : protein.name === "Lean Ground Beef 90/10" ? 13 : 8,
-      veg.name === "Broccoli" ? 8 : 6
-    );
+    const proteinTime = protein.name === "Chicken Breast" ? 17 : protein.name === "Salmon" ? 14 : protein.name === "Lean Ground Beef 90/10" ? 13 : 8;
+    const carbTime = carb.time;
+    const vegTime = veg.time;
+    const totalTime = Math.max(proteinTime, carbTime, vegTime, 1);
 
     const timeline = [
-      { name: carb.name, displayName: carb.name === "Rice Cooked" ? "Rice" : carb.name, startAt: 0, duration: estimatedTime, prepTime: 3, cookTime: estimatedTime - 3 },
-      { name: protein.name, displayName: protein.name.replace(" Breast", "").replace(" 90/10", ""), startAt: Math.max(estimatedTime - 17, 0), duration: Math.min(17, estimatedTime), prepTime: 4, cookTime: Math.max(Math.min(17, estimatedTime) - 4, 1) },
-      { name: veg.name, displayName: veg.name, startAt: Math.max(estimatedTime - 8, 0), duration: 8, prepTime: 2, cookTime: 6 },
+      { name: carb.name, displayName: carb.name === "Rice Cooked" ? "Rice" : carb.name, startAt: Math.max(totalTime - carbTime, 0), duration: carbTime, prepTime: 3, cookTime: Math.max(carbTime - 3, 1) },
+      { name: protein.name, displayName: protein.name.replace(" Breast", "").replace(" 90/10", ""), startAt: Math.max(totalTime - proteinTime, 0), duration: proteinTime, prepTime: 4, cookTime: Math.max(proteinTime - 4, 1) },
+      { name: veg.name, displayName: veg.name, startAt: Math.max(totalTime - vegTime, 0), duration: vegTime, prepTime: 2, cookTime: Math.max(vegTime - 2, 1) },
     ].sort((a, b) => a.startAt - b.startAt);
 
-    const steps = [
-      `Start the ${carb.name.toLowerCase()} first so the longest component is already moving.`,
-      `Prep the ${protein.name.toLowerCase()} while the ${carb.name.toLowerCase()} cooks.`,
-      `Start the ${protein.name.toLowerCase()} with enough time for it to finish hot with the rest.`,
-      `Cook the ${veg.name.toLowerCase()} near the end so it stays fresh and not overdone.`,
-      `Add the ${fat.name.toLowerCase()} at the end for better texture and flavor.`,
+    const baseSteps = [
+      `Start the ${timeline[0].displayName.toLowerCase()} first because it takes the longest.`,
+      `Prepare the ${protein.name.toLowerCase()} while the first item cooks.`,
+      `Start the ${protein.name.toLowerCase()} so it finishes at the same time as the rest.`,
+      `Cook the ${veg.name.toLowerCase()} near the end so it stays fresh.`,
+      fatG > 0 ? `Add ${fat.name.toLowerCase()} at the end for better texture and flavor.` : `Skip added fat and keep the finish lighter.`,
       `Assemble as a ${category.replace("_", " ")} and serve immediately.`,
     ];
+
+    const steps = chefMode === "quick" ? baseSteps.slice(0, 4) : baseSteps.concat([
+      `Chef note: with goal set to ${goalLabels[goal]}, the portion sizes change automatically in Auto mode and so do the macros.`,
+      `Final check: taste, texture, and temperature before plating.`,
+    ]);
 
     return {
       title: `${goalLabels[goal]} ${protein.name} + ${carb.name}`,
@@ -231,12 +279,16 @@ function EliteSavoryBuilder() {
       ].filter(Boolean),
       total,
       timeline,
-      steps: chefMode === "quick" ? steps.slice(0, 4) : steps.concat([
-        `Chef note: start the protein around minute ${Math.max(estimatedTime - 17, 0)} so everything lands together.`,
-        `Chef finish: check seasoning and temperature in the final minute before plating.`,
-      ]),
+      totalTime,
+      steps,
+      snapshot: [
+        { label: protein.name.replace(" Breast", ""), grams: proteinG },
+        { label: carb.name === "Rice Cooked" ? "Rice" : carb.name, grams: carbG },
+        ...(fatG > 0 ? [{ label: fat.name, grams: fatG }] : []),
+        { label: veg.name, grams: vegG },
+      ],
     };
-  }, [goal, protein, carb, fat, veg, style, category, chefMode, portionMode, custom]);
+  }, [goal, protein, carb, fat, veg, chefMode, portionMode, custom, category]);
 
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: 20 }}>
@@ -248,16 +300,22 @@ function EliteSavoryBuilder() {
           <SelectField label="Carb" value={carbName} onChange={setCarbName} options={savoryCarbs.map((x) => x.name)} />
           <SelectField label="Fat" value={fatName} onChange={setFatName} options={savoryFats.map((x) => x.name)} />
           <SelectField label="Vegetable" value={vegName} onChange={setVegName} options={savoryVeg.map((x) => x.name)} />
-          <SelectField label="Cooking Style" value={style} onChange={setStyle} options={[{ value: "pan", label: "Pan" }, { value: "air_fryer", label: "Air Fryer" }, { value: "oven", label: "Oven" }, { value: "cold", label: "Cold Prep" }]} />
-          <SelectField label="Meal Category" value={category} onChange={setCategory} options={[{ value: "bowl", label: "Bowl" }, { value: "sandwich", label: "Sandwich" }, { value: "breakfast", label: "Breakfast" }, { value: "meal_prep", label: "Meal Prep" }]} />
           <SelectField label="Chef Mode" value={chefMode} onChange={setChefMode} options={[{ value: "chef", label: "Chef" }, { value: "quick", label: "Quick" }]} />
+          <SelectField label="Meal Category" value={category} onChange={setCategory} options={[{ value: "bowl", label: "Bowl" }, { value: "sandwich", label: "Sandwich" }, { value: "breakfast", label: "Breakfast" }, { value: "meal_prep", label: "Meal Prep" }]} />
           <SelectField label="Portion Mode" value={portionMode} onChange={setPortionMode} options={[{ value: "auto", label: "Auto" }, { value: "custom", label: "Custom" }]} />
+        </div>
+
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+          <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>Mode Guide</div>
+          <div style={{ color: theme.subtext, fontSize: 13, lineHeight: 1.7 }}>
+            In <strong style={{ color: theme.text }}>Auto</strong> mode, changing the goal changes grams and macros. In <strong style={{ color: theme.text }}>Custom</strong> mode, your manual grams take priority.
+          </div>
         </div>
 
         {portionMode === "custom" && (
           <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-            {sectionHeader("Custom Meal Portions")}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginTop: 10 }}>
+            <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>Custom Meal Portions</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
               <NumberField label="Protein (g)" value={custom.protein} onChange={(value) => setCustom((p) => ({ ...p, protein: value }))} helper={`${gramsToOunces(custom.protein)} oz`} />
               <NumberField label="Carb (g)" value={custom.carb} onChange={(value) => setCustom((p) => ({ ...p, carb: value }))} helper={`${gramsToOunces(custom.carb)} oz`} />
               <NumberField label="Fat (g)" value={custom.fat} onChange={(value) => setCustom((p) => ({ ...p, fat: value }))} helper={`${gramsToOunces(custom.fat)} oz`} />
@@ -268,7 +326,7 @@ function EliteSavoryBuilder() {
       </div>
 
       <div style={{ ...cardStyle, padding: 24 }}>
-        {sectionHeader("Generated Savory Meal")}
+        <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>Generated Savory Meal</div>
         <h2 style={{ margin: "10px 0 8px", fontSize: 36, lineHeight: 1.08, fontFamily: theme.headingFont }}>{recipe.smartTitle}</h2>
         <div style={{ color: theme.accent, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>{recipe.title}</div>
 
@@ -288,12 +346,9 @@ function EliteSavoryBuilder() {
         {tab === "ingredients" && (
           <>
             <div style={{ marginBottom: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-              {sectionHeader("Portion Snapshot")}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10, marginTop: 10 }}>
-                <MiniPortionCard label={protein.name.replace(" Breast", "")} grams={portionMode === "custom" ? custom.protein : protein.grams[goal]} />
-                <MiniPortionCard label={carb.name === "Rice Cooked" ? "Rice" : carb.name} grams={portionMode === "custom" ? custom.carb : carb.grams[goal]} />
-                {fat.name !== "None" ? <MiniPortionCard label={fat.name} grams={portionMode === "custom" ? custom.fat : fat.grams[goal]} /> : null}
-                <MiniPortionCard label={veg.name} grams={portionMode === "custom" ? custom.veg : veg.grams[goal]} />
+              <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>Meal Plan Portion Snapshot</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
+                {recipe.snapshot.map((item) => <MiniPortionCard key={item.label} label={item.label} grams={item.grams} />)}
               </div>
             </div>
 
@@ -319,8 +374,8 @@ function EliteSavoryBuilder() {
         {tab === "timeline" && (
           <div style={{ display: "grid", gap: 14 }}>
             {recipe.timeline.map((entry, index) => {
-              const left = recipe.estimatedTime > 0 ? `${(entry.startAt / recipe.estimatedTime) * 100}%` : "0%";
-              const width = recipe.estimatedTime > 0 ? `${(entry.duration / recipe.estimatedTime) * 100}%` : "0%";
+              const left = recipe.totalTime > 0 ? `${(entry.startAt / recipe.totalTime) * 100}%` : "0%";
+              const width = recipe.totalTime > 0 ? `${(entry.duration / recipe.totalTime) * 100}%` : "0%";
               return (
                 <div key={index} style={{ border: `1px solid ${theme.border}`, borderRadius: 18, padding: 16, background: theme.bgSoft }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 8 }}>
@@ -341,7 +396,7 @@ function EliteSavoryBuilder() {
   );
 }
 
-function EliteDessertBuilder() {
+function DessertBuilder() {
   const [goal, setGoal] = useState("lean");
   const [baseName, setBaseName] = useState("Greek Yogurt Nonfat");
   const [carbName, setCarbName] = useState("Oats Dry");
@@ -366,31 +421,24 @@ function EliteDessertBuilder() {
       calcMacros(addon, addonG),
     ]);
 
-    const title = `${goalLabels[goal]} ${flavor} ${style}`;
-    const smartTitle = `${goalLabels[goal]} ${flavor} ${style} Builder`;
-
     const stepsByStyle = {
       "Ice Cream": [
         "Blend all ingredients until completely smooth.",
-        "Freeze the mixture until solid.",
-        "Re-spin or blend again for a creamier finish.",
+        "Freeze until solid, then spin or blend again.",
         "Add any topping last so texture stays clean.",
       ],
       "Cheesecake Bowl": [
         "Blend the base until smooth and creamy.",
-        "Mix in the carb source for body and texture.",
-        "Fold in any add-on last.",
-        "Chill before serving for a thicker finish.",
+        "Mix in the carb source for body.",
+        "Fold in any add-on last and chill before serving.",
       ],
       "Pudding": [
         "Whisk all ingredients until smooth.",
         "Let the mixture thicken.",
-        "Adjust sweetness or flavor at the end.",
         "Serve chilled.",
       ],
       "Mug Cake": [
         "Mix ingredients until lump-free.",
-        "Pour into a mug or small dish.",
         "Microwave or air fry until just set.",
         "Rest briefly before eating.",
       ],
@@ -398,21 +446,23 @@ function EliteDessertBuilder() {
         "Mix the base and dry ingredients until thick.",
         "Fold in add-on last.",
         "Chill if you want firmer texture.",
-        "Serve as a bowl or bite-style dough.",
       ],
     };
 
     return {
-      title,
-      smartTitle,
+      smartTitle: `${goalLabels[goal]} ${flavor} ${style}`,
       ingredients: [
         `${baseG}g ${base.name}`,
         `${carbG}g ${carb.name}`,
         addonG > 0 ? `${addonG}g ${addon.name}` : null,
-        `${gramsToOunces(baseG)} oz base • ${gramsToOunces(carbG)} oz carb`,
       ].filter(Boolean),
       total,
       steps: stepsByStyle[style],
+      snapshot: [
+        { label: base.name, grams: baseG },
+        { label: carb.name, grams: carbG },
+        ...(addonG > 0 ? [{ label: addon.name, grams: addonG }] : []),
+      ],
     };
   }, [goal, base, carb, addon, style, flavor, portionMode, custom]);
 
@@ -422,7 +472,7 @@ function EliteDessertBuilder() {
         <div style={{ fontSize: 30, fontWeight: 700, marginBottom: 16, fontFamily: theme.headingFont }}>Dessert Builder</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
           <SelectField label="Goal" value={goal} onChange={setGoal} options={Object.entries(goalLabels).map(([value, label]) => ({ value, label }))} />
-          <SelectField label="Dessert Style" value={style} onChange={setStyle} options={dessertStyles} />
+          <SelectField label="Dessert Style" value={style} onChange={setStyle} options={["Ice Cream", "Cheesecake Bowl", "Pudding", "Mug Cake", "Cookie Dough"]} />
           <SelectField label="Flavor" value={flavor} onChange={setFlavor} options={["Vanilla", "Chocolate", "Strawberry", "Birthday Cake", "Biscoff", "Brownie Batter"]} />
           <SelectField label="Base" value={baseName} onChange={setBaseName} options={dessertBases.map((x) => x.name)} />
           <SelectField label="Carb" value={carbName} onChange={setCarbName} options={dessertCarbs.map((x) => x.name)} />
@@ -430,10 +480,17 @@ function EliteDessertBuilder() {
           <SelectField label="Portion Mode" value={portionMode} onChange={setPortionMode} options={[{ value: "auto", label: "Auto" }, { value: "custom", label: "Custom" }]} />
         </div>
 
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+          <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>Goal Logic</div>
+          <div style={{ color: theme.subtext, fontSize: 13, lineHeight: 1.7 }}>
+            In Auto mode, switching goals changes dessert portions and macros. In Custom mode, your manual grams stay locked.
+          </div>
+        </div>
+
         {portionMode === "custom" && (
           <div style={{ marginTop: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
-            {sectionHeader("Custom Dessert Portions")}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginTop: 10 }}>
+            <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>Custom Dessert Portions</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
               <NumberField label="Base (g)" value={custom.base} onChange={(value) => setCustom((p) => ({ ...p, base: value }))} helper={`${gramsToOunces(custom.base)} oz`} />
               <NumberField label="Carb (g)" value={custom.carb} onChange={(value) => setCustom((p) => ({ ...p, carb: value }))} helper={`${gramsToOunces(custom.carb)} oz`} />
               <NumberField label="Add-on (g)" value={custom.addon} onChange={(value) => setCustom((p) => ({ ...p, addon: value }))} helper={`${gramsToOunces(custom.addon)} oz`} />
@@ -443,15 +500,21 @@ function EliteDessertBuilder() {
       </div>
 
       <div style={{ ...cardStyle, padding: 24 }}>
-        {sectionHeader("Generated Dessert")}
+        <div style={{ ...sectionTitleStyle, marginBottom: 10 }}>Generated Dessert</div>
         <h2 style={{ margin: "10px 0 8px", fontSize: 36, lineHeight: 1.08, fontFamily: theme.headingFont }}>{recipe.smartTitle}</h2>
-        <div style={{ color: theme.accent, fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>{recipe.title}</div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(135px, 1fr))", gap: 12, marginBottom: 20 }}>
           <StatCard label="Calories" value={`${recipe.total.calories}`} />
           <StatCard label="Protein" value={`${recipe.total.protein}g`} />
           <StatCard label="Carbs" value={`${recipe.total.carbs}g`} />
           <StatCard label="Fat" value={`${recipe.total.fat}g`} />
+        </div>
+
+        <div style={{ marginBottom: 14, padding: 14, borderRadius: 16, background: theme.bgSoft, border: `1px solid ${theme.border}` }}>
+          <div style={{ ...sectionTitleStyle, marginBottom: 8 }}>Portion Snapshot</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 10 }}>
+            {recipe.snapshot.map((item) => <MiniPortionCard key={item.label} label={item.label} grams={item.grams} />)}
+          </div>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, marginBottom: 16 }}>
@@ -473,18 +536,8 @@ function EliteDessertBuilder() {
   );
 }
 
-function MiniPortionCard({ label, grams }) {
-  return (
-    <div style={{ border: `1px solid ${theme.border}`, borderRadius: 14, padding: 12, background: "rgba(255,255,255,0.02)" }}>
-      <div style={{ color: theme.subtext, fontSize: 12, marginBottom: 6 }}>{label}</div>
-      <div style={{ color: theme.text, fontWeight: 700 }}>{grams}g</div>
-      <div style={{ color: theme.subtext, fontSize: 12 }}>{gramsToOunces(grams)} oz</div>
-    </div>
-  );
-}
-
 export default function Page() {
-  const [appTab, setAppTab] = useState("dessert");
+  const [appTab, setAppTab] = useState("savory");
 
   return (
     <div style={{ minHeight: "100vh", background: theme.bg, color: theme.text, fontFamily: theme.bodyFont }}>
@@ -492,12 +545,12 @@ export default function Page() {
         <div style={{ ...cardStyle, padding: 28, marginBottom: 20 }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 20, flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ maxWidth: 820 }}>
-              {sectionHeader("Sclass Fitness")}
+              <div style={sectionTitleStyle}>Sclass Fitness</div>
               <h1 style={{ margin: "10px 0 12px", fontSize: 52, lineHeight: 1.02, color: theme.text, fontFamily: theme.headingFont, letterSpacing: "0.02em" }}>
                 Elite Recipe App
               </h1>
               <p style={{ margin: 0, color: theme.subtext, fontSize: 16, lineHeight: 1.7 }}>
-                One luxury build with both worlds combined: your Dessert system and your Savory meal builder in a single elite app. Switch between tabs, generate macros, control portions, and build recipes without leaving the same platform.
+                One luxury build with both worlds combined: your Dessert system and your Savory meal builder in a single elite app. Goal switching now updates grams and macros correctly in Auto mode.
               </p>
             </div>
             <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
@@ -514,27 +567,12 @@ export default function Page() {
           <button onClick={() => setAppTab("savory")} style={tabButtonStyle(appTab === "savory")}>Savory Builder</button>
         </div>
 
-        {appTab === "dessert" ? <EliteDessertBuilder /> : <EliteSavoryBuilder />}
+        {appTab === "dessert" ? <DessertBuilder /> : <SavoryBuilder />}
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginTop: 20 }}>
-          <div style={{ ...cardStyle, padding: 20 }}>
-            {sectionHeader("Dessert Side")}
-            <div style={{ color: theme.subtext, lineHeight: 1.7, marginTop: 10 }}>
-              Built for your dessert-style recipe generation with cleaner builder controls, smart flavor flow, and portion editing for client use.
-            </div>
-          </div>
-          <div style={{ ...cardStyle, padding: 20 }}>
-            {sectionHeader("Savory Side")}
-            <div style={{ color: theme.subtext, lineHeight: 1.7, marginTop: 10 }}>
-              Keeps the savory standard you approved for regular meals, including timeline logic, chef mode, and meal-plan portion entry.
-            </div>
-          </div>
-          <div style={{ ...cardStyle, padding: 20 }}>
-            {sectionHeader("Combined App")}
-            <div style={{ color: theme.subtext, lineHeight: 1.7, marginTop: 10 }}>
-              This gives you one stronger product foundation for future updates instead of managing separate apps for desserts and regular meals.
-            </div>
-          </div>
+          <InfoCard title="Goal Logic Fixed" body="Lean, Low Cal, Anabolic, and Bulk now change the grams and macros in Auto mode on both sides of the app." />
+          <InfoCard title="Savory Side" body="Includes portion planner, timeline, and chef mode for your regular meal system." />
+          <InfoCard title="Dessert Side" body="Keeps a cleaner dessert builder with styles, flavors, and portion control inside the same app." />
         </div>
       </div>
     </div>

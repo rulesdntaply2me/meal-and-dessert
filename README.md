@@ -1,11 +1,8 @@
 # Sclass Elite Combined App
 
-This app combines Dessert + Savory builders into one deployable Next.js project.
+Fixed version:
+- cardStyle defined properly
+- goal switching updates grams and macros in Auto mode
+- Next.js deployable structure
 
-## Deploy
-Upload to Vercel as a Next.js app.
-
-## Commands
-- npm install
-- npm run build
-- npm run start
+Deploy to Vercel as a Next.js app.
